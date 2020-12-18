@@ -18,5 +18,7 @@ full URL to the backend service you wish to proxy to.
 For example:
 
 ```
-$ docker run --rm -e BACKEND_URL="https://example.z9.web.core.windows.net" static-edge
+$ docker run --rm \
+	-e BACKEND_URL="https://example.z9.web.core.windows.net" \
+	docker.pkg.github.com/alexblackie/static-edge:1
 ```
