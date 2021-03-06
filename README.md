@@ -1,5 +1,7 @@
 # static-edge
 
+[Docker Hub](https://hub.docker.com/r/alexblackie/static-edge/)
+
 This is a small Docker container that reverse-proxies to a given URL, intended
 to be used to integrate "simple" hosting methods into a Kubernetes-first
 infrastructure paradigm.
