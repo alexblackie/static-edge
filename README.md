@@ -20,5 +20,8 @@ For example:
 ```
 $ docker run --rm \
 	-e BACKEND_URL="https://example.z9.web.core.windows.net" \
-	docker.pkg.github.com/alexblackie/static-edge:1
+	alexblackie/static-edge:latest
 ```
+
+There are also versioned tags available, which are the recommended images for
+production use.
