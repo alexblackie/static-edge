@@ -1,38 +1,28 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euf -o pipefail
+set -e
 
 if [ "${BACKEND_URL:-}" = "" ] ; then
 	echo "You must set BACKEND_URL."
 	exit 1
 fi
 
-cat > /etc/nginx/nginx.conf <<-EOCONF
-events {
-	worker_connections  1024;
-	use epoll;
-}
+cat > /etc/nginx/conf.d/default.conf <<-EOCONF
+server {
+	listen 80;
+	listen [::]:80;
+	server_name _ default_server;
 
-http {
-	include mime.types;
-	default_type application/octet-stream;
+	location / {
+		proxy_http_version 1.1;
+		proxy_set_header Host \$host;
+		proxy_set_header X-Real-IP \$remote_addr;
+		proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+		proxy_read_timeout 30;
 
-	server {
-		listen 80;
-		listen [::]:80;
-		server_name _ default_server;
-
-		location / {
-			proxy_http_version 1.1;
-			proxy_set_header Host \$host;
-			proxy_set_header X-Real-IP \$remote_addr;
-			proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-			proxy_read_timeout 30;
-
-			proxy_pass ${BACKEND_URL};
-		}
+		proxy_pass ${BACKEND_URL};
 	}
 }
 EOCONF
 
-/usr/sbin/nginx -g 'daemon off;'
+nginx -g 'daemon off;'
